@@ -27,6 +27,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 session_regenerate_id(true);
                 $_SESSION['username'] = $row["username"];
                 $_SESSION['loggedIn'] = true;
+                if ($row["is_admin"] == 1) {
+                    $_SESSION['is_admin'] = true;
+                }
                 session_write_close();
                 header("location: dashboard.php");
             } else {

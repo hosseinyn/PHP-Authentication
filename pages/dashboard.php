@@ -21,7 +21,11 @@ if (!isset($_SESSION["loggedIn"]) || $_SESSION["loggedIn"] !== true) {
 <body>
 
 <?php
-echo "<h1 style='margin-top: 50px;'>Welecome $_SESSION[username] ! </h1>";
+if (isset($_SESSION["is_admin"]) && $_SESSION["is_admin"] === true) {
+    echo "<h1 style='margin-top: 50px;'>Welecome $_SESSION[username]. You're Admin ! </h1>";
+} else {
+    echo "<h1 style='margin-top: 50px;'>Welecome $_SESSION[username] ! </h1>";
+}
 ?>
 
 <p>What to do : </p>
