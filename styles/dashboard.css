@@ -1,0 +1,32 @@
+h1 , p {
+    text-align: center;
+}
+
+h1 {
+    font-size: 40px;
+}
+
+.options-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 7px;
+    margin-top: 15px;
+}
+
+.options-button button {
+    width: 130px;
+    height: 35px;
+    background-color: #f31111;
+    color: #fff;
+    border: 0;
+    border-radius: 7px;
+    outline: none;
+    cursor: pointer;
+    transition: 0.65s;
+    margin-top: 11px;
+}
+
+.options-button button:hover {
+    background-color: #bd0e0e;
+}
