@@ -1,6 +1,8 @@
 <?php
 
-if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
+session_start();
+
+if (isset($_SESSION["loggedIn"]) && $_SESSION["loggedIn"] === true) {
     header("location: dashboard.php");
     exit;
 }
@@ -40,6 +42,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta charset="UTF-8">
     <link rel="stylesheet" href="../styles/font.css" />
     <link rel="stylesheet" href="../styles/auth-form.css" />
+    <link rel="icon" href="../assets/favicon.ico" />
     <title>PHP Register</title>
 </head>
 <body>

@@ -1,5 +1,7 @@
 <?php
 
+session_start();
+
 if (isset($_SESSION["loggedIn"]) && $_SESSION["loggedIn"] === true) {
     header("location: dashboard.php");
     exit;
@@ -22,7 +24,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (mysqli_num_rows($result) > 0) {
             $row = mysqli_fetch_array($result);
             if (password_verify($password, $row["password"])) {
-                session_start();
                 session_regenerate_id(true);
                 $_SESSION['username'] = $row["username"];
                 $_SESSION['loggedIn'] = true;
@@ -46,6 +47,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta charset="UTF-8">
     <link rel="stylesheet" href="../styles/font.css" />
     <link rel="stylesheet" href="../styles/auth-form.css" />
+    <link rel="icon" href="../assets/favicon.ico" />
     <title>PHP Login</title>
 </head>
 <body>

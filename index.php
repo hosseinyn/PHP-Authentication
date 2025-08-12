@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <link rel="stylesheet" href="styles/font.css" />
     <link rel="stylesheet" href="styles/index.css" />
+    <link rel="icon" href="assets/favicon.ico" />
     <title>PHP Authentication</title>
 </head>
 <body>
