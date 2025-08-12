@@ -34,7 +34,7 @@ HTML;
     echo <<<HTML
 <div class="options-button">
     <a href="pages/dashboard.php"><button>Dashboard</button></a>
-    <a href=""><button>Log out</button></a>
+    <a href="operations/logout.php"><button>Log out</button></a>
 </div>
 HTML;
 }
