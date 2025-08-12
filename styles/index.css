@@ -1,0 +1,45 @@
+a {
+    text-decoration: none;
+    color: #0033ff;
+}
+
+.menu {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    justify-content: center;
+    margin-top: 65px;
+}
+
+h1 , p {
+    text-align: center;
+}
+
+.options-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 7px;
+    margin-top: 15px;
+}
+
+.options-button button {
+    width: 100px;
+    height: 35px;
+    background-color: #f31111;
+    color: #fff;
+    border: 0;
+    border-radius: 7px;
+    outline: none;
+    cursor: pointer;
+    transition: 0.65s;
+    margin-top: 11px;
+}
+
+.options-button button:hover {
+    background-color: #bd0e0e;
+}
+
+img {
+    height: 100px;
+}
