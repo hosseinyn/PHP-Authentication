@@ -59,10 +59,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <h1>PHP Login Page</h1>
 
     <label for="username">Username : </label>
-    <input type="text" id="username" name="username" placeholder="Enter username here..." minlength="4" maxlength="7" required />
+    <input type="text" id="username" name="username" placeholder="Enter username here..." minlength="4" maxlength="7" required oninvalid="this.setCustomValidity('Username is required')"
+           oninput="this.setCustomValidity('')" onkeyup="validateUsername()" />
 
     <label for="password">Password : </label>
-    <input type="password" id="password" name="password" placeholder="Enter password here..." minlength="5" maxlength="15" />
+    <input type="password" id="password" name="password" placeholder="Enter password here..." minlength="5" maxlength="15" oninvalid="this.setCustomValidity('Password is required')"
+           oninput="this.setCustomValidity('')"/>
+
+    <p class='error' id="error"></p>
 
     <?php
     if ($error != "") {
@@ -75,5 +79,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <button type="submit">Login</button>
 </form>
 
+<script src="../scripts/validate.js"></script>
 </body>
 </html>
