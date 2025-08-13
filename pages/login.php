@@ -13,8 +13,17 @@ include __DIR__ . "/../database/database.php";
 $error = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    if (empty($_POST["csrf_token"])) {
+        $error = "Csrf token is required";
+    } else {
+        $csrf_token = $_POST["csrf_token"];
+    }
     $username = $_POST['username'];
     $password = $_POST['password'];
+
+    if ($csrf_token !== $_SESSION["csrf_token"]) {
+        $error = "Invalid CSRF token";
+    } else {
 
 if (strlen($username) > 7 || strlen($password) > 15) {
     $error = "Fields are more than 7 or 15 characters";
@@ -36,6 +45,8 @@ if (strlen($username) > 7 || strlen($password) > 15) {
             }
             session_write_close();
             header("Location: dashboard.php");
+
+            $_SESSION["csrf_token"] = "";
             exit;
         } else {
             $error = "Invalid username or password";
@@ -45,7 +56,7 @@ if (strlen($username) > 7 || strlen($password) > 15) {
     }
 
     $stmt->close();
-}}
+}}}
 
 ?>
 
@@ -62,6 +73,13 @@ if (strlen($username) > 7 || strlen($password) > 15) {
 
 <form action="login.php" method="post" class="login-form">
     <h1>PHP Login Page</h1>
+
+    <input type="hidden" value="<?php
+    if (empty($_SESSION["csrf_token"])) {
+        $_SESSION["csrf_token"] = bin2hex(random_bytes(32));
+    }
+    echo $_SESSION["csrf_token"];
+    ?>" name="csrf_token">
 
     <label for="username">Username : </label>
     <input type="text" id="username" name="username" placeholder="Enter username here..." minlength="4" maxlength="7" required oninvalid="this.setCustomValidity('Username is required')"

@@ -4,15 +4,33 @@ global $conn;
 
 session_start();
 
-$username = $_SESSION['username'];
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    if (empty($_POST["csrf_token"])) {
+        echo "CSRF token is required";
+    } else {
+        $token = $_POST["csrf_token"];
+    }
 
-$stmt = $conn->prepare("DELETE FROM users WHERE username = ?");
-$stmt->bind_param("s", $username);
+    if ($token != $_SESSION["csrf_token"]) {
+        echo "CSRF token is invalid";
+    } else {
+        $username = $_SESSION['username'];
 
-$stmt->execute();
+        $stmt = $conn->prepare("DELETE FROM users WHERE username = ?");
+        $stmt->bind_param("s", $username);
 
-$stmt->close();
+        $stmt->execute();
 
-session_destroy();
-header("location: ../index.php");
-exit;
+        $stmt->close();
+
+        session_destroy();
+        header("location: ../index.php");
+
+        $_SESSION["csrf_token"] = "";
+
+        exit;
+    }
+} else {
+    header("location: ../pages/dashboard.php");
+    exit;
+}

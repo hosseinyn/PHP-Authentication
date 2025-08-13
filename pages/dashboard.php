@@ -7,6 +7,12 @@ if (!isset($_SESSION["loggedIn"]) || $_SESSION["loggedIn"] !== true) {
     exit;
 }
 
+if (empty($_SESSION["csrf_token"])) {
+    $_SESSION["csrf_token"] = bin2hex(random_bytes(32));
+}
+
+$csrf_token = $_SESSION["csrf_token"];
+
 ?>
 
 <!DOCTYPE html>
@@ -31,8 +37,14 @@ if (isset($_SESSION["is_admin"]) && $_SESSION["is_admin"] === true) {
 <p>What to do : </p>
 
 <div class="options-button">
-    <a href="../operations/delete_account.php"><button>Delete Account</button></a>
-    <a href="../operations/logout.php"><button>Log out</button></a>
+    <form action="../operations/delete_account.php" method="post">
+        <input type="hidden" value="<?php echo $csrf_token; ?>" name="csrf_token" />
+        <button type="submit">Delete Account</button>
+    </form>
+    <form action="../operations/logout.php" method="post">
+        <input type="hidden" value="<?php echo $csrf_token; ?>" name="csrf_token" />
+        <button type="submit">Log out</button>
+    </form>
     <a href="change_password.php"><button>Change password</button></a>
 </div>
 

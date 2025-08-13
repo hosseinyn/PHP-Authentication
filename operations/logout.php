@@ -1,7 +1,26 @@
 <?php
 
-session_destroy();
+session_start();
 
-header("location: ../index.php");
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    if (empty($_POST["csrf_token"])) {
+        echo "CSRF token is required";
+    } else {
+        $csrf_token = $_POST["csrf_token"];
+    }
 
-exit;
+    if ($csrf_token != $_SESSION["csrf_token"]) {
+        echo "CSRF token is invalid";
+    } else {
+        session_destroy();
+
+        header("location: ../index.php");
+
+        $_SESSION["csrf_token"] = "";
+
+        exit;
+    }
+} else {
+    header("location: ../pages/dashboard.php");
+    exit;
+}
