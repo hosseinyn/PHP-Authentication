@@ -16,31 +16,36 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $username = $_POST['username'];
     $password = $_POST['password'];
 
-    if (strlen($username) > 7 || strlen($password) > 15) {
-        $error = "Fields are more than 7 or 15 characters";
-    } else {
-        $sql = "SELECT * FROM users WHERE username = '$username'";
-        $result = mysqli_query($conn, $sql);
-        if (mysqli_num_rows($result) > 0) {
-            $row = mysqli_fetch_array($result);
-            if (password_verify($password, $row["password"])) {
-                session_regenerate_id(true);
-                $_SESSION['username'] = $row["username"];
-                $_SESSION['loggedIn'] = true;
-                if ($row["is_admin"] == 1) {
-                    $_SESSION['is_admin'] = true;
-                }
-                session_write_close();
-                header("location: dashboard.php");
-            } else {
-                $error = "Invalid username or password";
+if (strlen($username) > 7 || strlen($password) > 15) {
+    $error = "Fields are more than 7 or 15 characters";
+} else {
+    $stmt = $conn->prepare("SELECT * FROM users WHERE username = ?");
+    $stmt->bind_param("s", $username);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result->num_rows > 0) {
+        $row = $result->fetch_array(MYSQLI_ASSOC);
+
+        if (password_verify($password, $row["password"])) {
+            session_regenerate_id(true);
+            $_SESSION['username'] = $row["username"];
+            $_SESSION['loggedIn'] = true;
+            if ($row["is_admin"] == 1) {
+                $_SESSION['is_admin'] = true;
             }
+            session_write_close();
+            header("Location: dashboard.php");
+            exit;
         } else {
             $error = "Invalid username or password";
         }
-
+    } else {
+        $error = "Invalid username or password";
     }
-}
+
+    $stmt->close();
+}}
 
 ?>
 

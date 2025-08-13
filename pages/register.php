@@ -15,31 +15,38 @@ $error = "";
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $username = $_POST['username'];
     $entred_password = $_POST['password'];
-    $password = password_hash($_POST['password'] , PASSWORD_DEFAULT);
+    $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
     $confirm_password = $_POST['confirm_password'];
 
     if ($entred_password == $username) {
         $error = "Password can't be same with username";
-    } else {
-
-    if (strlen($username) > 7 || strlen($entred_password) > 15) {
+    } else if (strlen($username) > 7 || strlen($entred_password) > 15) {
         $error = "Fields are more than 7 or 15 characters";
+    } else if ($entred_password != $confirm_password) {
+        $error = "Passwords do not match";
     } else {
-        if ($entred_password != $confirm_password) {
-            $error = "Passwords do not match";
+        $stmt = $conn->prepare("SELECT 1 FROM users WHERE username = ?");
+        $stmt->bind_param("s", $username);
+        $stmt->execute();
+        $stmt->store_result();
+
+        if ($stmt->num_rows > 0) {
+            $error = "Username already exists";
         } else {
-            $check_user_query = "SELECT * FROM users WHERE username = '$username'";
-            $result = mysqli_query($conn , $check_user_query);
-            if (mysqli_num_rows($result) > 0) {
-                $error = "Username already exists";
+            $hashed_password = password_hash($entred_password, PASSWORD_DEFAULT);
+
+            $stmt = $conn->prepare("INSERT INTO users (username, password) VALUES (?, ?)");
+            $stmt->bind_param("ss", $username, $hashed_password);
+
+            if ($stmt->execute()) {
+                header("Location: login.php");
+                exit;
             } else {
-            $sql = "INSERT INTO users (username, password) VALUES ('$username', '$password')";
-            if ($conn->query($sql) === true) {
-                header("location: login.php");
-            } else {
-                $error = "Error: " . $sql . "<br>" . $conn->error;
-            } }
-    } } }
+                $error = "Database error: " . $conn->error;
+            }
+        }
+        $stmt->close();
+    }
 }
 
 ?>

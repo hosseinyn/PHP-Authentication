@@ -5,9 +5,13 @@ global $conn;
 session_start();
 
 $username = $_SESSION['username'];
-$sql = "DELETE FROM users WHERE username='$username'";
 
-$result = mysqli_query($conn, $sql);
+$stmt = $conn->prepare("DELETE FROM users WHERE username = ?");
+$stmt->bind_param("s", $username);
+
+$stmt->execute();
+
+$stmt->close();
 
 session_destroy();
 header("location: ../index.php");
