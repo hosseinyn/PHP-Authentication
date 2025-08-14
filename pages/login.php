@@ -15,6 +15,7 @@ $error = "";
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (empty($_POST["csrf_token"])) {
         $error = "Csrf token is required";
+        die("Csrf token is required");
     } else {
         $csrf_token = $_POST["csrf_token"];
     }
