@@ -20,6 +20,17 @@ if (empty($_SESSION["csrf_token"])) {
 $csrf_token = $_SESSION["csrf_token"];
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    if (!isset($_SESSION["change_password_tries"]) || !isset($_SESSION["change_password_tries_expires"]) || time() > $_SESSION["change_password_tries_expires"]) {
+        $_SESSION["change_password__tries"] = 1;
+        $_SESSION["change_password_tries_expires"] = time() + 100;
+    } else {
+        $_SESSION["change_password_tries"]++;
+    }
+
+    if ($_SESSION["change_password_tries"] > 3) {
+        die("Too many attempts. Try again after " . ceil(($_SESSION["change_password_tries_expires"] - time()) / 60) . " minutes.");
+    }
+
     $csrf_token = $_POST["csrf_token"];
     if ($_SESSION["csrf_token"] === $csrf_token) {
         $current_password = $_POST["current_password"];

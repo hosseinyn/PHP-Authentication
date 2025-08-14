@@ -13,6 +13,18 @@ include __DIR__ . "/../database/database.php";
 $error = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
+    if (!isset($_SESSION["login_tries"]) || !isset($_SESSION["login_tries_expires"]) || time() > $_SESSION["login_tries_expires"]) {
+        $_SESSION["login_tries"] = 1;
+        $_SESSION["login_tries_expires"] = time() + 100;
+    } else {
+        $_SESSION["login_tries"]++;
+    }
+
+    if ($_SESSION["login_tries"] > 3) {
+        die("Too many attempts. Try again after " . ceil(($_SESSION["login_tries_expires"] - time()) / 60) . " minutes.");
+    }
+
     if (empty($_POST["csrf_token"])) {
         $error = "Csrf token is required";
         die("Csrf token is required");
@@ -72,7 +84,7 @@ if (strlen($username) > 7 || strlen($password) > 15) {
 </head>
 <body>
 
-<form action="login.php" method="post" class="login-form">
+<form action="login.php" method="post" class="login-form" id="login-form">
     <h1>PHP Login Page</h1>
 
     <input type="hidden" value="<?php
