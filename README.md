@@ -9,15 +9,22 @@ A secure authentication project with php mysql
 
 ### Features 
 1- Front-side and backend side form validation
+
 2- Prevent sql injection
+
 3- CSRF protection
+
 4- Simple session-based rate limiting
 
 ### Functionalities
 1- Login
+
 2- Signup
+
 3- Delete account
+
 4- Change password
+
 5- Admin account
 
 ### How to use?
