@@ -41,8 +41,11 @@ A secure authentication project with php mysql
 
 ### Optional todo :
 1- Advanced rate limiting (use redis for caching black list)
+
 2- Use captcha for more security and prevent brute force attacks
+
 3- Email-based welcome message , forgot password and verify
+
 
 
 
